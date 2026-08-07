@@ -1,0 +1,29 @@
+/* Starting code for CSS */
+:root {
+    
+    --dark-green: #132A13;
+    --medium-green: #31572C;
+    --primary-green: #47772D;
+    --accent-green: #90A955;
+    --light-green: #ECF39E;
+    --white: #FFFFFF;
+}
+
+
+    body{
+        font-family: Arial, Helvitca, sans-serif;
+        line-height: 1.6;
+        color: var(--dark-green);
+        background-color: var(--white);
+    }
+    img {
+        display: block;
+        max-width: 100%;
+        height: auto;
+    }
+    main {
+        width:100%;
+    }
+    section {
+        padding: 3rem 1.5rem;
+    }
