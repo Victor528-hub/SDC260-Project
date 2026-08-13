@@ -31,7 +31,7 @@ const services = [
   },
   {
     name: "Customs Clearance Coordination",
-    description: "Coordination with customs brokers to assist with import clearance and required documentations.",
+    description: "Coordination with customs brokers to assist with import clearance and required documentation.",
     image: "images/customs-clearance.jpg",
   },
   {
@@ -51,14 +51,15 @@ const services = [
   },
   {
     name: "Shipment Coordination",
-    description: "End-to-end coordination pf transportation, delivery scheduling, and shipment updates.",
+    description: "End-to-end coordination of transportation, delivery scheduling, and shipment updates.",
     image: "images/shipment-coordination.jpg",
   },
 ];
-
+const serviceContainer = document.getElementById("service-container");
 for(const service of services){
     serviceContainer.innerHTML += `
     <article class="service-card">
+        <img src="${service.image}" alt="${service.name}">
         <h3>${service.name}</h3>
         <p>${service.description}</p>
         <button>Request a Quote</button>

@@ -1,4 +1,97 @@
-<header></header>
-<nav></nav>
-<main></main>
-<footer></footer>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gulfstream Global Logistics - Contact</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <header>
+        <h1>Gulfstream Global Logistics</h1>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="services.html">Services</a>
+            <a href="quote.html">Request a Quote</a>
+            <a href="tracking.html">Track Shipment</a>
+            <a href="contact.html">Contact Us</a>
+        </nav>
+    </header>
+<main>
+    <h1>Booking and Billing Information</h1>
+    <p>
+        Complete the information below to finalize your booking request.
+        Gulfstream Global Logistics will contact you to confirm payment terms and billing arrangments. Please ensure all information is accurate to avoid delays in processing your request.
+    </p>
+
+    <form id="booking-form" novalidate>
+        <label for="quote-number">Quote Number</label>
+        <input type="text" id="quote-number" required>
+
+        <label for="company-name">Company Name</label>
+        <input type="text" id="company-name" required>
+
+        <label for="contact-name">Contact Name</label>
+        <input type="text" id="contact-name" required>
+
+        <label for="email">Email Address</label>
+        <input type="email" id="email" required>
+
+        <label for="phone">Phone Number</label>
+        <input type="tel" id="phone" required>
+
+        <h2>Shipment Information</h2>
+
+        <label for="service-type">Service Type</label>
+        <select id="service-type" required>
+            <option value="">Select a service</option>
+            <option value="fcl">Full Container Load (FCL)</option>
+            <option value="lcl">Less than Container Load (LCL)</option>
+            <option value="drayage">Drayage</option>
+            <option value="transloading">Transloading</option>
+            <option value="warehousing">Warehousing</option>
+        </select>
+
+        <label for="origin">Origin</label>
+        <input type="text" id="origin" required>
+
+        <label for="destination">Destination</label>
+        <input type="text" id="destination" required>
+
+        <label for="reference-number">Reference Number</label>
+        <input type="text" id="reference-number">
+
+        <h2>Billing Contact</h2>
+        <label for="billing-name">Billing Contact Name</label>
+        <input type="text" id="billing-name" required>
+
+        <label for="billing-email">Billing Contact Email</label>
+        <input type="email" id="billing-email" required>
+
+        <label for="billing-phone">Billing Contact Phone</label>
+        <input type="tel" id="billing-phone" required>
+
+        <label for="billing-city">Billing Contact City</label>
+        <input type="text" id="billing-city" required>
+
+        <label for="billing-state">Billing Contact State</label>
+        <input type="text" id="billing-state" required>
+
+        <label for="billing-zip">Billing Contact Zip Code</label>
+        <input type="text" id="billing-zip" required>
+
+        <h2>Additional Information</h2>
+
+        <label for="booking-notes">Booking Notes</label>
+        <textarea id="booking-notes"></textarea>
+
+        <button type="submit">Submit Booking Request</button>
+        <p id="booking-error"></p>
+
+    </form>
+</section>
+</main>
+<script src="js/checkout.js"></script>
+    <footer> <p>&copy; 2023 Gulfstream Global Logistics. All rights reserved.</p> </footer>
+    </body>
+</html>
