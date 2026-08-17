@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gulfstream Global Logistics - Contact</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <header>
+        <h1>Gulfstream Global Logistics</h1>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="services.html">Services</a>
+            <a href="quote.html">Request a Quote</a>
+            <a href="tracking.html">Track Shipment</a>
+            <a href="contact.html">Contact Us</a>
+        </nav>
+    </header>
+    <main>
+        <section>
+            <h2>Your Quote Request</h2>
+
+            <p>Review your selected services and adjust the quantities before continuing to the booking form. </p>
+
+            <!-- JavaScript will display selected services here-->
+             <div id="quote-request-container"></div>
+
+             <p>
+                <strong>Total Request Units:</strong>
+                <span id="tota-units">0</span>
+             </p>
+
+             <p id="empty-message"></p>
+             <button type="button" id="clear-request">
+                Clear Request
+             </button>
+
+             <button type="button" id="continue-booking">
+                Continue to Booking
+             </button>
+        </section>
+      </main>
+      <script src="js/quote-request.js"></script> 
+        <footer> <p>&copy; 2026 Gulfstream Global Logistics. All rights reserved.</p> </footer>
+    </body>
+</html>
