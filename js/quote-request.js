@@ -1,44 +1,50 @@
-const quoteRequestContainer = document.querySelector("#quote-request-container");
+const quoteRequestContainer =
+    document.querySelector("#quote-request-container");
+const totalUnitsElement =
+    document.querySelector("#total-units");
+const emptyMessage =
+    document.querySelector("#empty-message");
+const clearRequestButton =
+    document.querySelector("#clear-request");
+const continueBookingButton =
+    document.querySelector("#continue-booking");
 
-const totalUnitsElement = document.querySelector("#total-units");
+const STORAGE_KEY = "GGLQuoteRequest";
 
-const emptyMessage = document.querySelector("#empty-message");
-
-const clearRequestButton = document.querySelector("#clear-request");
-
-const continueBookingButton = document.querySelector("#continu-booking");
-
-let quoteRequest = JSON.parse(localStorage.getItem("GGLQuoteRequest")) || [];
+let quoteRequest =
+    JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
 
 function saveQuoteRequest(){
     localStorage.setItem(
-        "GGLQuoteRequest",
+        STORAGE_KEY,
         JSON.stringify(quoteRequest)
     );
 }
 
 function calculateTotalUnits(){
-    let totalUnites = 0;
+    let totalUnits = 0;
+
     for (const service of quoteRequest){
-        totalUnites += service.quantity;
+        totalUnits += service.quantity;
     }
-    totalUnitsElement.textContent = totalUnites;
+
+    totalUnitsElement.textContent = totalUnits;
 }
-function displayQuoteRequest(){
+
+function displayQuoteRequest() {
     quoteRequestContainer.innerHTML = "";
 
-    if (quoteRequest.length === 0){
-        emptyMessage.textContent = "Your quote request is currently empty.";
-    
-        clearRequestButton.disable = true;
-        continueBookingButton.disable = true;
+    const requestIsEmpty = quoteRequest.length === 0;
+
+    clearRequestButton.disabled = requestIsEmpty;
+    continueBookingButton.disabled = requestIsEmpty;
+
+    if (requestIsEmpty) {
+        emptyMessage.textContent =
+            "Your shipment request is currently empty.";
     } else {
         emptyMessage.textContent = "";
-
-        clearRequestButton.disable = false;
-        continueBookingButton.disable = false;
     }
-
     for (const service of quoteRequest){
         const requestItem = document.createElement("article");
 
@@ -48,63 +54,71 @@ function displayQuoteRequest(){
         <h3>${service.name}</h3>
         
         <p>
-            Quanity:
-            <button 
+            Unit: ${service.unit}
+        </p>
+        
+        <p>
+            Pricing: ${service.pricing}
+        </p>
+        
+        <p>
+            Quantity:
+            <button
                 type="button"
                 class="decrease-button"
                 data-service-id="${service.id}">
                 -
-                </button>
-                
-                <span>${service.quanity}</span>
-                
-                <button
-                    type="button"
-                    class="increase-button"
-                    data-service-id="${service.id}">
-                    +
-                    </button>
+            </button>
+            <span>${service.quantity}</span>
+            
+            <button
+                type="button"
+                class="increase-button"
+                data-service-id="${service.id}">
+                +
+            </button>
         </p>
-        
         <button
             type="button"
             class="remove-button"
             data-service-id="${service.id}">
-            Remove
+           Remove
         </button>
-        `;
+    `;
 
-        quoteRequestContainer.appendChild(requestItem);
+    quoteRequestContainer.appendChild(requestItem);
     }
 
     calculateTotalUnits();
 }
-
 function increaseQuantity(serviceID) {
-    const service = quoteRequest.find(function (item){
-        return item.iid === serviceID;
+    const service = quoteRequest.find(function (item) {
+        return item.id === serviceID;
     });
-    
-    if (service) {
-        service.quantity++;
+
+    if (!service) {
+        return;
     }
+    
+    service.quantity++;
+
     saveQuoteRequest();
     displayQuoteRequest();
 }
 
-function decreaseQuantity(serviceId){
-    const service = quoteRequest.find(function (item) {
-        return item.id === serviceId;
+function decreaseQuantity(serviceID){
+    const service = quoteRequest.find(function (item){
+        return item.id === serviceID;
     });
-    
-    if (!service){
+
+    if (!service) {
         return;
     }
 
     if (service.quantity > 1) {
         service.quantity--;
     } else {
-        removeService(serviceId);
+        removeService(serviceID);
         return;
     }
 
@@ -114,39 +128,38 @@ function decreaseQuantity(serviceId){
 
 function removeService(serviceID) {
     quoteRequest = quoteRequest.filter(function (service){
-        return service.id !== serviceId;
+        return service.id !== serviceID;
     });
 
     saveQuoteRequest();
     displayQuoteRequest();
 }
 
-quoteRequestContainrequestContainer.addEventListener("click", function (event) {
+quoteRequestContainer.addEventListener("click", function (event){
     const serviceID = Number(event.target.dataset.serviceId);
 
-    if (event.target.classList.contains("increase-button")) {
-        increaseQuantity(serviceId);
+    if (event.target.classList.contains ("increase-button")) {
+        increaseQuantity(serviceID);
     }
 
     if (event.target.classList.contains ("decrease-button")){
-        decreaseQuantity(serviceId);
+        decreaseQuantity(serviceID);
     }
 
-    if (event.target.classList.contains("remove-button")) {
-        removeService(serviceId);
-        }
-    });
-clearRequestButton.addEventListener("click", function (){
+    if (event.target.classList.contains("remove-button")){
+        removeService(serviceID);
+    }
+});
+clearRequestButton.addEventListener("click", function () {
     quoteRequest = [];
 
     saveQuoteRequest();
     displayQuoteRequest();
+
 });
 
 continueBookingButton.addEventListener("click", function () {
-    if (quoteRequest.length > 0){
+    if (quoteRequest.length > 0) {
         window.location.href = "booking.html";
     }
 });
-
-displayQuoteRequest();
