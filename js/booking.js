@@ -18,9 +18,11 @@ bookingForm.addEventListener("submit", function (event) {
 
     const quoteNumber = document.querySelector("#quote-number").value.trim();
     const companyName = document.querySelector("#company-name").value.trim();
-    const contacName = document.querySelector("#contact-name").value.trim();
+    const contactName = document.querySelector("#contact-name").value.trim();
     const email = document.querySelector("#email").value.trim();
     const phone = document.querySelector("#phone").value.trim();
+    const referenceNumber = document.querySelector("#reference-number").value.trim();
+    const bookingNotes = document.querySelector("#booking-notes").value.trim();
 
     const serviceType = document.querySelector("#service-type").value.trim();
     const origin = document.querySelector("#origin").value.trim();
@@ -32,11 +34,12 @@ bookingForm.addEventListener("submit", function (event) {
     const billingCity = document.querySelector("#billing-city").value.trim();
     const billingState = document.querySelector("#billing-state").value.trim();
     const billingZip = document.querySelector("#billing-zip").value.trim();
+    const billingPhone = document.querySelector("#billing-phone").value.trim();
 
     if (
         quoteNumber === "" ||
         companyName === "" ||
-        contacName === "" ||
+        contactName === "" ||
         email === "" ||
         phone === "" ||
         serviceType === "" ||
@@ -47,7 +50,8 @@ bookingForm.addEventListener("submit", function (event) {
         billingAddress === "" ||
         billingCity === "" ||
         billingState === "" ||
-        billingZip === ""     
+        billingZip === ""   ||
+        billingPhone === ""  
     )   
     {
         bookingError.textContent = "Please fill in all required fields.";
@@ -78,11 +82,53 @@ bookingForm.addEventListener("submit", function (event) {
         bookingError.style.display = "block";
         return;
     }
+    {
+        if (!validatePhone(billingPhone)) {
+            bookingError.textContent ="Please enter a valid billing phone number.";
+            bookingError.style.display = "block";
+            return;
+        }
+    }
     
     // If all validations pass, you can submit the form or perform further actions here.
-    bookingError.style.display = "none";
-    alert("Your booking request has been submitted. Gulfstream Global Logistics will review the shipment information and accounting will contact you regarding billing.");
+   bookingError.style.display = "none";
 
+   const quoteRequest = 
+    JSON.parse(localStorage.getItem("GGLQuoteRequest")) || [];
+
+    const requestNumber =
+        `GGL-${new Date().getFullYear()}-${Date.now()}`;
+
+    const bookingRequest = {
+        requestNumber: requestNumber,
+        submittedAt: new Date().toISOString(),
+        quoteNumber: quoteNumber,
+        companyName: companyName,
+        contactName: contactName,
+        email: email,
+        phone: phone,
+        serviceType: serviceType,
+        origin: origin,
+        destination: destination,
+        billingName: billingName,
+        billingEmail: billingEmail,
+        billingAddress: billingAddress,
+        billingCity: billingCity,
+        billingState: billingState,
+        billingZip: billingZip,
+        quoteRequest: quoteRequest,
+        referenceNumber: referenceNumber,
+        bookingNotes: bookingNotes,
+        billingPhone: billingPhone,
+    };
+
+    localStorage.setItem(
+        "GGLBookingRequest",
+        JSON.stringify(bookingRequest)
+    );
+    localStorage.removeItem("GGLQuoteRequest");
+
+    window.location.href = "confirmation.html";
 
 
 bookingForm.reset();

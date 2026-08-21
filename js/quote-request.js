@@ -10,14 +10,25 @@ const continueBookingButton =
     document.querySelector("#continue-booking");
 
 const STORAGE_KEY = "GGLQuoteRequest";
+const CAPACITY_KEY = "GGLServiceCapacity";
 
 let quoteRequest =
     JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+
+let availableCapacity =
+    JSON.parse(localStorage.getItem(CAPACITY_KEY)) || {};
 
 function saveQuoteRequest(){
     localStorage.setItem(
         STORAGE_KEY,
         JSON.stringify(quoteRequest)
+    );
+}
+
+function saveCapacity(){
+    localStorage.setItem(
+        CAPACITY_KEY,
+        JSON.stringify(availableCapacity)
     );
 }
 
@@ -35,6 +46,7 @@ function displayQuoteRequest() {
     quoteRequestContainer.innerHTML = "";
 
     const requestIsEmpty = quoteRequest.length === 0;
+    
 
     clearRequestButton.disabled = requestIsEmpty;
     continueBookingButton.disabled = requestIsEmpty;
@@ -59,6 +71,10 @@ function displayQuoteRequest() {
         
         <p>
             Pricing: ${service.pricing}
+        </p>
+
+        <p>
+            Price: Pending carrier quote
         </p>
         
         <p>
@@ -99,10 +115,14 @@ function increaseQuantity(serviceID) {
     if (!service) {
         return;
     }
-    
+    if (availableCapacity[serviceID] <=0) {
+        return;
+}
     service.quantity++;
+    availableCapacity[serviceID]--;
 
     saveQuoteRequest();
+    saveCapacity();
     displayQuoteRequest();
 }
 
@@ -117,21 +137,34 @@ function decreaseQuantity(serviceID){
 
     if (service.quantity > 1) {
         service.quantity--;
+        availableCapacity[serviceID]++;
     } else {
         removeService(serviceID);
         return;
     }
 
     saveQuoteRequest();
+    saveCapacity();
     displayQuoteRequest();
 }
 
 function removeService(serviceID) {
-    quoteRequest = quoteRequest.filter(function (service){
-        return service.id !== serviceID;
+    const service = quoteRequest.find(function (item){
+        return item.id === serviceID;
+    });
+
+    if (!service){
+        return;
+    }
+
+    availableCapacity[serviceID] += service.quantity;
+
+    quoteRequest= quoteRequest.filter(function (item) {
+        return item.id !== serviceID;
     });
 
     saveQuoteRequest();
+    saveCapacity();
     displayQuoteRequest();
 }
 
@@ -151,9 +184,14 @@ quoteRequestContainer.addEventListener("click", function (event){
     }
 });
 clearRequestButton.addEventListener("click", function () {
+    for (const service of quoteRequest){
+        availableCapacity[service.id] += service.quantity;
+    }
     quoteRequest = [];
+    
 
     saveQuoteRequest();
+    saveCapacity();
     displayQuoteRequest();
 
 });
@@ -163,3 +201,5 @@ continueBookingButton.addEventListener("click", function () {
         window.location.href = "booking.html";
     }
 });
+displayQuoteRequest();
+
